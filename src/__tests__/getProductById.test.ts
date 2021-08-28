@@ -37,16 +37,13 @@ describe('getProductById handler', () => {
       }
     } as any;
     const actual = await main(event);
-    expect(JSON.parse(actual.body)).toEqual({
-      "product":{
+    expect(actual).toEqual({
         "count":6,
         "description":"A sock is a piece of clothing worn on the feet and often covering the ankle or some part of the calf.",
         "id":"7567ec4b-b10c-48c5-9345-fc73c48a80a0",
         "price":10,
         "title":"Organic",
         "img":"https://dodosocks.com/wp-content/uploads/2020/12/gus_02.jpg"
-      },
     });
-    expect(actual.statusCode).toBe(200);
   });
 });

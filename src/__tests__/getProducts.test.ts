@@ -18,9 +18,8 @@ describe('getProducts handler', () => {
 
   it('should return an array of products', async () => {
     const actual = await main();
-    expect(JSON.parse(actual.body)).toEqual({
+    expect(actual).toEqual({
       products
     });
-    expect(actual.statusCode).toBe(200);
   });
 });
