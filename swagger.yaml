@@ -1,0 +1,60 @@
+openapi: 3.0.0
+info:
+  title: Socks shop
+  version: 1.0.0-oas3
+servers:
+  - url: https://31zjtpybn2.execute-api.eu-west-1.amazonaws.com/dev
+components:
+  schemas:
+    Product:
+      properties:
+        count:
+          type: number
+        id:
+          type: string
+        description:
+          type: string
+        price:
+          type: number
+        title:
+          type: string
+        img:
+          type: string
+paths:
+  /products:
+    get:
+      summary: Returns a list of products.
+      responses:
+        '200':
+          description: JSON array of products
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+        '404':
+          description: message with no product found
+          content:
+            application/json:
+              schema:
+                type: string
+                items:
+                  $ref: '#/components/schemas/Product'
+  /products/{productId}:
+    get:
+      summary: Returns a product
+      parameters:
+        - in: path
+          name: productId
+          schema:
+            type: string
+          required: true
+          description: UUID of the product to get
+      responses:
+        '200':
+          description: Product object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
