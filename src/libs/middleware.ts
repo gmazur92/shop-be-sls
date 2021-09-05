@@ -1,3 +1,4 @@
+import { writeError, writeLog } from '@libs/logger';
 import middy from '@middy/core';
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 
@@ -6,6 +7,10 @@ import { AppError } from './appError';
 import MiddlewareFunction = middy.MiddlewareFunction;
 
 export const apiGatewayResponseMiddleware = (options: { enableErrorLogger?: boolean } = {}) => {
+
+  const before: MiddlewareFunction<APIGatewayProxyEvent, any> = async (request) => {
+    writeLog(request.event, request.context);
+  }
 
   const after: MiddlewareFunction<APIGatewayProxyEvent, any> = async (request) => {
     if (!request.event?.httpMethod || request.response === undefined || request.response === null) {
@@ -25,7 +30,10 @@ export const apiGatewayResponseMiddleware = (options: { enableErrorLogger?: bool
   }
 
   const onError: MiddlewareFunction<APIGatewayProxyEvent, APIGatewayProxyResult> = async (request) => {
+    const VALIDATION_ERROR = 'Event object failed validation'
+    const blame = {};
     const { error } = request;
+    const errorResponse = { message: error.message }
     let statusCode = 500;
 
     if (error instanceof AppError) {
@@ -33,13 +41,28 @@ export const apiGatewayResponseMiddleware = (options: { enableErrorLogger?: bool
     }
 
     if (options.enableErrorLogger) {
-      console.error(error);
+      writeError(error)
     }
 
-    request.response = formatJSONResponse({ message: error.message }, statusCode);
+    if (error.message === VALIDATION_ERROR) {
+      const details = (error as any).details
+      statusCode = 400;
+
+      for (const detail of details) {
+        const name = detail.instancePath.split('/')[2]
+        blame[name] = detail.message
+      }
+    }
+
+    if (error.message === VALIDATION_ERROR) {
+      request.response = formatJSONResponse({ ...errorResponse, blame }, statusCode);
+    } else {
+      request.response = formatJSONResponse(errorResponse, statusCode);
+    }
   }
 
   return {
+    before,
     after,
     onError,
   };
