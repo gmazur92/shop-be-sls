@@ -19,7 +19,7 @@ export default class ProductRepository {
         ' stocks s ON p.id = s.product_id WHERE p.id = $1', [id]);
       return data[0];
     } catch (e) {
-      throw new AppError(e.message, 500);
+      throw new AppError(`Product with id ${id} is not found`);
     } finally {
       client.end();
     }
