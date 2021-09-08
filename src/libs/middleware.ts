@@ -49,8 +49,13 @@ export const apiGatewayResponseMiddleware = (options: { enableErrorLogger?: bool
       statusCode = 400;
 
       for (const detail of details) {
-        const name = detail.instancePath.split('/')[2]
-        blame[name] = detail.message
+        if (detail.params.missingProperty) {
+          const { missingProperty } = detail.params
+          blame[missingProperty] = detail.message
+        } else {
+          const name = detail.instancePath?.split('/')[2]
+          blame[name] = detail.message
+        }
       }
     }
 
