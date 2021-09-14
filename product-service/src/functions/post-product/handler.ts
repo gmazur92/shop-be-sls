@@ -1,5 +1,5 @@
 import 'source-map-support/register';
-import { middyfy } from '@libs/lambda';
+import { middyfy } from '../../libs/lambda';
 import middy from '@middy/core';
 import validator from '@middy/validator';
 import productService from '../../resources/product.service';

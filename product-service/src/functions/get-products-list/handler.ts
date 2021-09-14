@@ -1,5 +1,5 @@
 import 'source-map-support/register';
-import { middyfy } from '@libs/lambda';
+import { middyfy } from '../../libs/lambda';
 import productService from '../../resources/product.service';
 
 const getProductsList = async () => {
