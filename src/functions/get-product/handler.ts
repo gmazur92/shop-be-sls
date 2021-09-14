@@ -1,12 +1,10 @@
 import 'source-map-support/register';
 import { middyfy } from '@libs/lambda';
-import { ProductService } from '../../resources/productService';
-import { Product } from '../../types';
+import productService from '../../resources/product.service';
 
 const getProductsById = async (event) => {
-  const {productId} = event.pathParameters;
-    const product: Product = await ProductService.getById(productId);
-    return product;
+  const { productId } = event.pathParameters;
+  return await productService.getById(productId);
 };
 
 export const main = middyfy(getProductsById);
