@@ -10,7 +10,7 @@ const serverlessConfiguration: AWS = {
       includeModules: true,
     },
   },
-  plugins: ['serverless-webpack', 'serverless-offline', 'serverless-dotenv-plugin'],
+  plugins: ['serverless-webpack', 'serverless-offline'],
   provider: {
     name: 'aws',
     runtime: 'nodejs14.x',
@@ -22,6 +22,8 @@ const serverlessConfiguration: AWS = {
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
       BUCKET: 'socks-shop-bucket',
+      UPLOADS: 'parsed',
+      PARSED: 'uploads',
     },
     lambdaHashingVersion: '20201221',
     iamRoleStatements: [

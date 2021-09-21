@@ -1,20 +1,21 @@
 import 'source-map-support/register';
 import { S3Event } from 'aws-lambda';
-
 import { S3 } from 'aws-sdk';
 import csv from 'csv-parser';
+import { writeLog } from '@libs/logger';
 import { formatJSONResponse } from '@libs/apiGateway';
 import { middyfy } from '@libs/lambda';
+import { BUCKET, UPLOADS, PARSED } from '../../config/config';
 
 const importFileParser = async (event: S3Event) => {
-  console.log('Parser started.');
+  writeLog('Parser started.');
   const s3 = new S3({ region: 'eu-west-1' });
-  const Bucket = 'socks-shop-bucket';
+  const Bucket = BUCKET;
 
   try {
     for (const record of event.Records) {
       const Key = record.s3.object.key;
-      console.log(`Reading file: ${Key}`);
+      writeLog(`Reading file: ${Key}`);
       const s3Stream = s3.getObject({ Bucket, Key }).createReadStream();
       s3Stream
         .pipe(csv())
@@ -23,18 +24,18 @@ const importFileParser = async (event: S3Event) => {
           throw new Error(`Reading failed: ${err}`);
         })
         .on('end', async () => {
-          console.log('Reading completed.');
-          console.log(`Replacing file...`);
+          writeLog('Reading completed.');
+          writeLog(`Replacing file...`);
           await s3.copyObject({
             Bucket,
             CopySource: `${Bucket}/${Key}`,
-            Key: Key.replace('uploads', 'parsed'),
+            Key: Key.replace(`${UPLOADS}`, `${PARSED}`),
           }).promise();
           await s3.deleteObject({
             Bucket,
             Key,
           }).promise();
-          console.log('File has been successfully replaced into parsed folder');
+          writeLog('File has been successfully replaced into parsed folder');
         });
     }
 
