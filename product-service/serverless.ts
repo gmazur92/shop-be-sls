@@ -72,7 +72,7 @@ const serverlessConfiguration: AWS = {
       createProductSubscription: {
         Type: 'AWS::SNS::Subscription',
         Properties: {
-          Endpoint: 'gmazur92@gmail.com',
+          Endpoint: '${env:PRIMARY_EMAIL}',
           Protocol: 'email',
           TopicArn: {
             Ref: 'createProductTopic',
@@ -89,7 +89,7 @@ const serverlessConfiguration: AWS = {
       expensiveProductSubscription: {
         Type: 'AWS::SNS::Subscription',
         Properties: {
-          Endpoint: 'george.mazur@fivewalls.com.ua',
+          Endpoint: '${env:SECONDARY_EMAIL}',
           Protocol: 'email',
           TopicArn: {
             Ref: 'createProductTopic',
