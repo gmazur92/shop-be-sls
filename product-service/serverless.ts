@@ -22,7 +22,7 @@ const serverlessConfiguration: AWS = {
     },
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
-      DB_PORT: '5432',
+      DB_PORT: '',
       DB_NAME: '',
       DB_USER: '',
       DB_PASSWORD: '',

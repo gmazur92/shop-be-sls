@@ -1,6 +1,6 @@
 import { mocked } from 'ts-jest/utils';
 import { Handler } from 'aws-lambda';
-import { middyfy } from '@libs/lambda';
+import { middyfy } from '../libs/lambda';
 jest.mock('@libs/lambda');
 
 describe('getProductById handler', () => {

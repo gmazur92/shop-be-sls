@@ -1,5 +1,5 @@
-import { AppError } from '@libs/appError';
-import dbConfig from '@libs/dbConfig';
+import { AppError } from '../libs/appError';
+import dbConfig from '../libs/dbConfig';
 import { Client } from 'pg';
 
 export default class ProductRepository {

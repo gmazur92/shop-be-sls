@@ -1,4 +1,4 @@
-import { writeError, writeLog } from '@libs/logger';
+import { writeError, writeLog } from './logger';
 import middy from '@middy/core';
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 
