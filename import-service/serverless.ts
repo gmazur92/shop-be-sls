@@ -4,6 +4,7 @@ import { importProductsFile, importFileParser } from '@functions/index';
 const serverlessConfiguration: AWS = {
   service: 'import-service',
   frameworkVersion: '2',
+  useDotenv: true,
   custom: {
     webpack: {
       webpackConfig: './webpack.config.js',
@@ -21,9 +22,10 @@ const serverlessConfiguration: AWS = {
     },
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
-      BUCKET: 'socks-shop-bucket',
+      BUCKET: '${env:BUCKET}',
       UPLOADS: 'uploads',
       PARSED: 'parsed',
+      SQS_URL: "${cf:product-service-dev.QueueUrl}",
     },
     lambdaHashingVersion: '20201221',
     iamRoleStatements: [
@@ -37,10 +39,15 @@ const serverlessConfiguration: AWS = {
         Action: "s3:*",
         Resource: `arn:aws:s3:::socks-shop-bucket/*`,
       },
+      {
+        Effect: "Allow",
+        Action: "sqs:*",
+        Resource: "${cf:product-service-dev.QueueArn}",
+      },
     ],
   },
   // import the function via paths
-  functions: { importProductsFile, importFileParser },
+  functions: { importProductsFile, importFileParser }
 };
 
 module.exports = serverlessConfiguration;
