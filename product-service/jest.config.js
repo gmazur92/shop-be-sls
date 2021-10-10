@@ -2,6 +2,7 @@ const { pathsToModuleNameMapper } = require('ts-jest/utils');
 const { compilerOptions } = require('./tsconfig.paths.json');
 
 module.exports = {
+  setupFiles: ["dotenv/config"],
   roots: [
     '<rootDir>'
   ],
