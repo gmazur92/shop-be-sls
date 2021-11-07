@@ -21,13 +21,13 @@ export class AppService {
       return null;
     }
 
-    let path = process.env[ service ]
+    let path = process.env[ service ];
 
     if (params) {
-      path = `${path}/${params}`
+      path = `${path}/${params}`;
     }
 
-    return { url: path, service  };
+    return { url: path, service };
   }
 
   async sendRequest(url: string, service: string, method: string, data: Record<string, any> = {}) {

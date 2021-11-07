@@ -10,6 +10,7 @@
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
+    "start:eb": "npm install --only=production && npm run build && npm run start:prod",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
@@ -18,7 +19,10 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "eb:deploy": "eb deploy --region eu-west-1 gmazur92-bff-env",
+    "eb:init": "eb init gmazur92-bff-api",
+    "eb:create": "eb create gmazur92-bff-api --platform node.js --cname gmazur92-bff-api --single --region eu-west-1"
   },
   "dependencies": {
     "@nestjs/axios": "0.0.3",
