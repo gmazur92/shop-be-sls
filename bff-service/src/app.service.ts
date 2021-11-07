@@ -18,7 +18,7 @@ export class AppService {
 
     if (!service || !process.env[ service ]) {
       this.logger.warn(`${service} not found`);
-      return null;
+      return { url: null, service };
     }
 
     let path = process.env[ service ];
