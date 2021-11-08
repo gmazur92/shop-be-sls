@@ -12,27 +12,25 @@ export class AppService {
   getRedirectPath(originalUrl: string) {
 
     this.logger.log(`originalUrl: ${originalUrl}`);
-    let service = originalUrl.split('/')[ 1 ];
+    const [_, service] = originalUrl.split('/');
     this.logger.log(`service: ${service}`);
-    let params = originalUrl.split('/')[ 2 ];
+
+    let newUrl = originalUrl;
+    if (service === 'cart') {
+      newUrl = originalUrl.replace(`/${service}`, '');
+    }
 
     if (!service || !process.env[ service ]) {
       this.logger.warn(`${service} not found`);
       return { url: null, service };
     }
 
-    let path = process.env[ service ];
-
-    if (params) {
-      path = `${path}/${params}`;
-    }
-
-    return { url: path, service };
+    return { url: `${process.env[ service ]}${newUrl}`, service };
   }
 
   async sendRequest(url: string, service: string, method: string, data: Record<string, any> = {}) {
 
-    if (service === 'products' && method === 'GET') {
+    if (service === 'products' && method === 'GET' && !url.split('/')[5]) {
       const products = await this.cacheManager.get('products');
       if (products) {
         return { status: HttpStatus.OK, data: products };
@@ -50,7 +48,7 @@ export class AppService {
     try {
       const { status, data } = await axios(axiosConfig);
 
-      if (service === 'products' && method === 'GET') {
+      if (service === 'products' && method === 'GET' && !url.split('/')[5]) {
         await this.cacheManager.set('products', data, { ttl: 120 });
       }
       return { status, data };
